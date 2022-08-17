@@ -1,8 +1,8 @@
-# APIRestful-ecommerce
+# APIRestful-ecommerce ‍💻
 
 ## Aqui ficará parte da documentação do projeto, onde deixarei claro as tecnologias aplicadas, design, padrões e etc.
 
-### Projeto inicializado usando o [Spring Initializr](https://start.spring.io/)
+### Projeto inicializado usando o [Spring Initializr](https://start.spring.io/) 🍃
 
 #### Neste projeto, será desenvolvido uma APIRestful, para gerenciamento das vendas de um Ecommerce, onde o diagrama conceitual e cardinalidades, foram elaborados como mostra a imagem abaixo.
 
