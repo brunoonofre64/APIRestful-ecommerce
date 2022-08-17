@@ -28,7 +28,7 @@ H2 DATABASE | http://www.h2database.com/html/build.html
 
 * A camada ***domain***, é onde terá as entidades da API, onde acontece o  mapeamento e relacionamento delas, baseados no diagrama já elaborado acima.
 
-* A camada de ***exception*** é onde está as exceções personalidas da nossa API.
+* A camada de ***exception***, é onde está as exceções personalidas da nossa API.
 
 * A camada de ***repositories***, segue o padrão Repository Pattern, reponsável por abstrair a persistência no banco de dados, com a responsabilidade desacoplada.
 
