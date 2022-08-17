@@ -38,4 +38,4 @@ H2 DATABASE | http://www.h2database.com/html/build.html
 
 * A camada de ***dto*** (*****DATA TRANSFER OBJECT*****) ele usa de um objeto mais simples, na aplicação usaremos o formato ***JSON***. **(terá uma imagem exemplo abaixo)** para transferir dados de um local a outro na aplicação, sem necessidade de regra de negócio em seus objetos, perceba que não precisamos explicitamente chamar todos os atributos dos objetos, e através do id, ele já abstrai a complexidade da transferência.
 
-![JSON do dto](ecommerce/imagem/jsondto.jpeg)
+![JSON DTO](ecommerce/imagem/jsondto.jpeg)
