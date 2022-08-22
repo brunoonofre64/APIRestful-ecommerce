@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -17,5 +18,7 @@ public class InformacoesPedidoDTO {
     private String cpf;
     private String telefone;
     private String nome;
+    private String dataPedido;
+    private BigDecimal totalPedido;
     private List<InformacoesItemPedidoDTO> items;
 }

@@ -1,10 +1,12 @@
 package com.brunoonofre64.rest.controller;
 
 import com.brunoonofre64.domain.Pedido;
+import com.brunoonofre64.rest.dto.InformacoesPedidoDTO;
 import com.brunoonofre64.rest.dto.PedidoDTO;
 import com.brunoonofre64.service.PedidoService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -21,5 +23,11 @@ public class PedidoController {
     public Integer save( @RequestBody  PedidoDTO dto ) {
         Pedido pedido = pedidoService.salvar(dto);
         return pedido.getId();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(NO_CONTENT)
+    public InformacoesPedidoDTO getById(@PathVariable Integer id ) {
+        return pedidoService.getById(id);
     }
 }

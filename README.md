@@ -39,3 +39,24 @@ H2 DATABASE | http://www.h2database.com/html/build.html
 * A camada de ***dto*** (*****DATA TRANSFER OBJECT*****) ele usa de um objeto mais simples, na aplicação usaremos o formato ***JSON***. **(terá uma imagem exemplo abaixo)** para transferir dados de um local a outro na aplicação, sem necessidade de regra de negócio em seus objetos, perceba que não precisamos explicitamente chamar todos os atributos dos objetos, e através do id, ele já abstrai a complexidade da transferência.
 
 ![JSON DTO](ecommerce/imagem/jsondto.jpeg)
+
+
+## Foi usado o [Postman](https://www.postman.com/) para validar o funcionamento correto dos end points desta API, segue abaixo o path deles.
+
+### OBS: todo id entre {}, é onde recebe o id puro, ex: cliente/v1/api/1
+
+ENTIDADE | END POINT                                 | MÉTODO HTTP | DETALHES
+-------- |-------------------------------------------|------------| -------
+CLIENTE  | http://localhost:8080/cliente/v1/api      | POST       | Salva um cliente no banco de dados, e gera 1 **id** auto incremento.
+CLIENTE  | http://localhost:8080/cliente/v1/api/{id} | GET        | Busca o cliente pelo **id**.
+CLIENTE  | http://localhost:8080/cliente/v1/api/{id} | PUT        | Recebe o **id**  do cliente que quer atualizar, e os novos dados dele.
+CLIENTE  | http://localhost:8080/cliente/v1/api/{id} | DELETE     | Recebe o ***id*** do cliente, e o deleta.
+CLIENTE  | http://localhost:8080/cliente/v1/api      | GET        | Recebe um filtro de busca pelo cliente, através dos atributos, ***id***, ***nome***, ***cpf*** ***e etc***. e retorna uma lista com clientes, que possuam os dados filtrados.
+ | |                                           | 
+PRODUTO  | http://localhost:8080/produto/v1/api      | POST       | Salva um produto no banco de dados, e gera 1 **id** auto incremento.
+PRODUTO  | http://localhost:8080/produto/v1/api/{id} | GET        | Busca o produto pelo **id**.
+PRODUTO  | http://localhost:8080/produto/v1/api/{id} | PUT        | Recebe o **id**  do produto que quer atualizar, e os novos dados dele.
+PRODUTO  | http://localhost:8080/produto/v1/api/{id} | DELETE     | Recebe o ***id*** do produto, e o deleta.
+PRODUTO  | http://localhost:8080/produto/v1/api      | GET        | Recebe um filtro de busca pelo produto, através dos atributos, ***id***, ***descricao***, ***e valor unitário***. e retorna uma lista com produtos, que possuam os dados filtrados.
+ |  |   |
+
