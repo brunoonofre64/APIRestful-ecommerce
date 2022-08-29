@@ -12,6 +12,5 @@ public interface PedidoService {
 
     Optional<Pedido> obterPedidoCompleto( Integer id );
 
-    InformacoesPedidoDTO getById( Integer id );
 
 }

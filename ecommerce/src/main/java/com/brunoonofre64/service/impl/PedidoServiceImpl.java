@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -45,7 +44,8 @@ public class PedidoServiceImpl implements PedidoService {
         Integer idCliente = dto.getCliente();
         Cliente cliente = clienteRepository
                 .findById(idCliente)
-                .orElseThrow( () -> new RegraNegocioException(ErrorMessage.CLIENTE_INVALIDO));
+                .orElseThrow( () ->
+                        new RegraNegocioException(ErrorMessage.CLIENTE_INVALIDO));
 
         Pedido pedido = new Pedido();
         pedido.setDataPedido(LocalDate.now());
@@ -59,9 +59,16 @@ public class PedidoServiceImpl implements PedidoService {
         return pedido;
     }
 
-    public List<ItemPedido> converterItems(Pedido pedido, List<ItemPedidoDTO> items) {
+    @Override
+    public Optional<Pedido> obterPedidoCompleto(Integer id) {
+        return pedidoRepository.findByIdFetchItens(id);
+    }
+
+
+    private List<ItemPedido> converterItems(Pedido pedido, List<ItemPedidoDTO> items) {
         if(items.isEmpty()) {
             throw new RegraNegocioException(ErrorMessage.LISTA_ITEMS_VAZIA);
+
         }
         return items
                 .stream()
@@ -78,45 +85,38 @@ public class PedidoServiceImpl implements PedidoService {
                     return itemPedido;
                 }).collect(Collectors.toList());
     }
-
-    @Override
-    public Optional<Pedido> obterPedidoCompleto( Integer id) {
-        return pedidoRepository.findByIdFetchItens(id);
-    }
-
-    public InformacoesPedidoDTO getById( @PathVariable Integer id ) {
+    public InformacoesPedidoDTO getById( Integer id ) {
         return obterPedidoCompleto(id)
-                .map( pedido -> converter(pedido))
-                .orElseThrow( () ->
+                .map(p -> converter(p))
+                .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 ErrorMessage.PEDIDO_NAO_ENCONTRADO));
     }
-
-    private InformacoesPedidoDTO converter( Pedido pedido ){
-        return InformacoesPedidoDTO
-                .builder()
-                .codigo((pedido.getId()))
-                .dataPedido(pedido.getDataPedido().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                .cpf(pedido.getCliente().getCpf())
-                .nome(pedido.getCliente().getNome())
-                .telefone(pedido.getCliente().getTelefone())
-                .totalPedido(pedido.getTotal())
-                .items(converter(pedido.getItems()))
-                .build();
-    }
-
-    private List<InformacoesItemPedidoDTO> converter(List<ItemPedido> itens) {
-        if(CollectionUtils.isEmpty(itens)) {
-            return Collections.emptyList();
+        private InformacoesPedidoDTO converter(Pedido pedido){
+            return InformacoesPedidoDTO
+                    .builder()
+                    .codigo(pedido.getId())
+                    .dataPedido(pedido.getDataPedido().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                    .telefone(pedido.getCliente().getTelefone())
+                    .cpf(pedido.getCliente().getCpf())
+                    .nome(pedido.getCliente().getNome())
+                    .totalPedido(pedido.getTotal())
+                    .items(converter(pedido.getItems()))
+                    .build();
         }
-        return itens
-                .stream()
-                .map( item -> InformacoesItemPedidoDTO
-                        .builder()
-                        .descricaoProduto(item.getProduto().getDescricao())
-                        .precoUnitario(item.getProduto().getValorUnitario())
-                        .quantidade(item.getQuantidade())
-                        .build()
-                ).collect(Collectors.toList());
+
+        private List<InformacoesItemPedidoDTO> converter (List<ItemPedido> items) {
+            if (CollectionUtils.isEmpty(items)) {
+                return Collections.emptyList();
+            }
+            return items.stream().map(
+                    item -> InformacoesItemPedidoDTO
+                            .builder()
+                            .descricaoProduto(item.getProduto().getDescricao())
+                            .precoUnitario(item.getProduto().getValorUnitario())
+                            .quantidade(item.getQuantidade())
+                            .build()
+            ).collect(Collectors.toList());
+         }
     }
-}
+
