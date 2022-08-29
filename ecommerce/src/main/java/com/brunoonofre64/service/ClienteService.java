@@ -1,7 +1,7 @@
 package com.brunoonofre64.service;
 
-import com.brunoonofre64.apiError.ErrorMessage;
 import com.brunoonofre64.domain.Cliente;
+import com.brunoonofre64.exception.ErrorMessage;
 import com.brunoonofre64.repositories.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
