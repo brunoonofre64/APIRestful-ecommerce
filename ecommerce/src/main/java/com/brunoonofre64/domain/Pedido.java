@@ -26,6 +26,7 @@ public class Pedido {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status_pedido")
     private StatusPedido statusPedido;
 

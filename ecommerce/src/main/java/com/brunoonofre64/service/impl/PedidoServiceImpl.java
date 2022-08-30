@@ -4,7 +4,9 @@ import com.brunoonofre64.domain.Cliente;
 import com.brunoonofre64.domain.ItemPedido;
 import com.brunoonofre64.domain.Pedido;
 import com.brunoonofre64.domain.Produto;
+import com.brunoonofre64.domain.enums.StatusPedido;
 import com.brunoonofre64.exception.ErrorMessage;
+import com.brunoonofre64.exception.PedidoNaoEncontradoException;
 import com.brunoonofre64.exception.RegraNegocioException;
 import com.brunoonofre64.repositories.ClienteRepository;
 import com.brunoonofre64.repositories.ItemPedidoRepository;
@@ -51,6 +53,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setDataPedido(LocalDate.now());
         pedido.setTotal(dto.getTotal());
         pedido.setCliente(cliente);
+        pedido.setStatusPedido(StatusPedido.REALIZADO);
 
         List<ItemPedido> itemsPedido = converterItems(pedido, dto.getItems());
         pedidoRepository.save(pedido);
@@ -62,6 +65,17 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public Optional<Pedido> obterPedidoCompleto(Integer id) {
         return pedidoRepository.findByIdFetchItens(id);
+    }
+
+    @Override
+    @Transactional
+    public void atualizaStatusPedido( Integer id, StatusPedido statusPedido ) {
+        pedidoRepository
+                .findById(id)
+                .map( pedido -> {
+                    pedido.setStatusPedido(statusPedido);
+                   return pedidoRepository.save(pedido);
+                }).orElseThrow( () -> new PedidoNaoEncontradoException());
     }
 
 
@@ -101,6 +115,7 @@ public class PedidoServiceImpl implements PedidoService {
                     .cpf(pedido.getCliente().getCpf())
                     .nome(pedido.getCliente().getNome())
                     .totalPedido(pedido.getTotal())
+                    .statusPedido(pedido.getStatusPedido().name())
                     .items(converter(pedido.getItems()))
                     .build();
         }
@@ -118,5 +133,7 @@ public class PedidoServiceImpl implements PedidoService {
                             .build()
             ).collect(Collectors.toList());
          }
+
+
     }
 
