@@ -41,7 +41,7 @@ H2 DATABASE | http://www.h2database.com/html/build.html
 ![JSON DTO](ecommerce/imagem/jsondto.jpeg)
 
 
-## Foi usado o [Postman](https://www.postman.com/) para validar o funcionamento correto dos end points desta API, segue abaixo o path deles.
+## Foi usado inicialmente o [Postman](https://www.postman.com/) para validar o funcionamento correto dos end points desta API, conforme eu avançe no meu estudo, migrarei a documentação dos end points para o Swagger, segue abaixo o path deles.
 
 ### OBS: todo id entre {}, é onde recebe o id puro, ex: cliente/v1/api/1
 
@@ -55,8 +55,11 @@ CLIENTE  | http://localhost:8080/cliente/v1/api      | GET        | Recebe um fi
  | |                                           | 
 PRODUTO  | http://localhost:8080/produto/v1/api      | POST       | Salva um produto no banco de dados, e gera 1 **id** auto incremento.
 PRODUTO  | http://localhost:8080/produto/v1/api/{id} | GET        | Busca o produto pelo **id**.
-PRODUTO  | http://localhost:8080/produto/v1/api/{id} | PUT        | Recebe o **id**  do produto que quer atualizar, e os novos dados dele.
+PRODUTO  | http://localhost:8080/produto/v1/api/{id} | PUT        | Recebe o ***id***  do produto que quer atualizar, e os novos dados dele.
 PRODUTO  | http://localhost:8080/produto/v1/api/{id} | DELETE     | Recebe o ***id*** do produto, e o deleta.
 PRODUTO  | http://localhost:8080/produto/v1/api      | GET        | Recebe um filtro de busca pelo produto, através dos atributos, ***id***, ***descricao***, ***e valor unitário***. e retorna uma lista com produtos, que possuam os dados filtrados.
- |  |   |
+ |  |                                           |
+PEDIDO   | http://localhost:8080/pedido/v1/api       | POST       | Depois de já ter salvo as informações de cliente e produtos adiquiridos, esse método salva o pedido no banco de dados e gera 1 ***id*** que é autoincremento.
+PEDIDO   | http://localhost:8080/pedido/v1/api/{id}  | GET        | Recebe o ***id*** do pedido, e retorna todas as informações do mesmo, incluindo status, itens, quantidades, e valor total e etc.
+PEDIDO   | http://localhost:8080/pedido/v1/api/{id}  | PATCH      | Recebe o ***id*** do pedido, e no corpo da reposta, recebe o novo status do pedido, exemplo: ***REALIZADO*** ou ***CANCELADO***.
 
