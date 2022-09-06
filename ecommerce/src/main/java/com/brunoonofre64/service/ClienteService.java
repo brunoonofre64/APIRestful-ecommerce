@@ -8,6 +8,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,6 +21,10 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
 
     public Cliente getClienteById(Integer id) {
+        if(ObjectUtils.isEmpty(id)) {
+            getResponseStatusException();
+        }
+
         return clienteRepository
                 .findById(id)
                 .orElseThrow( () ->
@@ -32,6 +37,9 @@ public class ClienteService {
     }
 
     public void uptade( Integer id, Cliente cliente) {
+        if(ObjectUtils.isEmpty(id)) {
+            getResponseStatusException();
+        }
         clienteRepository
                 .findById(id)
                 .map( clienteExistente -> {
@@ -42,15 +50,16 @@ public class ClienteService {
     }
 
     public void delete( Integer id ) {
-        clienteRepository
-                .findById(id)
-                .map( cliente -> {
-                    clienteRepository.delete(cliente);
-                    return cliente;
-                }).orElseThrow( () -> getResponseStatusException());
+        if(clienteRepository.existsById(id)) {
+            delete(id);
+        }
+            getResponseStatusException();
     }
 
     public List<Cliente> findCliente( Cliente filtro ) {
+        if(ObjectUtils.isEmpty(filtro)) {
+            getResponseStatusException();
+        }
         ExampleMatcher matcher = ExampleMatcher
                                 .matching()
                                 .withIgnoreCase()
