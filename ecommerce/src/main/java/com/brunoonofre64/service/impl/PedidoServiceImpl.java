@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -43,6 +43,10 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     @Transactional
     public Pedido salvar( PedidoDTO dto ) {
+        if(ObjectUtils.isEmpty(dto)) {
+            throw new PedidoNaoEncontradoException();
+        }
+
         Integer idCliente = dto.getCliente();
         Cliente cliente = clienteRepository
                 .findById(idCliente)
@@ -64,12 +68,18 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public Optional<Pedido> obterPedidoCompleto(Integer id) {
+        if(ObjectUtils.isEmpty(id)) {
+            throw new PedidoNaoEncontradoException();
+        }
         return pedidoRepository.findByIdFetchItens(id);
     }
 
     @Override
     @Transactional
     public void atualizaStatusPedido( Integer id, StatusPedido statusPedido ) {
+        if(ObjectUtils.isEmpty(id)) {
+            throw new PedidoNaoEncontradoException();
+        }
         pedidoRepository
                 .findById(id)
                 .map( pedido -> {
@@ -80,7 +90,7 @@ public class PedidoServiceImpl implements PedidoService {
 
 
     private List<ItemPedido> converterItems(Pedido pedido, List<ItemPedidoDTO> items) {
-        if(items.isEmpty()) {
+        if(ObjectUtils.isEmpty(items)) {
             throw new RegraNegocioException(ErrorMessage.LISTA_ITEMS_VAZIA);
 
         }
@@ -100,12 +110,16 @@ public class PedidoServiceImpl implements PedidoService {
                 }).collect(Collectors.toList());
     }
     public InformacoesPedidoDTO getById( Integer id ) {
+        if(ObjectUtils.isEmpty(id)) {
+            throw new PedidoNaoEncontradoException();
+        }
         return obterPedidoCompleto(id)
                 .map(p -> converter(p))
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 ErrorMessage.PEDIDO_NAO_ENCONTRADO));
     }
+
         private InformacoesPedidoDTO converter(Pedido pedido){
             return InformacoesPedidoDTO
                     .builder()
@@ -121,7 +135,7 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         private List<InformacoesItemPedidoDTO> converter (List<ItemPedido> items) {
-            if (CollectionUtils.isEmpty(items)) {
+            if (ObjectUtils.isEmpty(items)) {
                 return Collections.emptyList();
             }
             return items.stream().map(

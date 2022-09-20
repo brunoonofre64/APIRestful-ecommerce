@@ -8,6 +8,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +22,9 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
 
     public Produto getProdutoById( Integer id ) {
+        if(ObjectUtils.isEmpty(id)) {
+            getResponseStatusException();
+        }
         return produtoRepository
                 .findById(id)
                 .orElseThrow(() -> getResponseStatusException());
@@ -31,6 +35,9 @@ public class ProdutoService {
     }
 
     public void update( Integer id, Produto produto ) {
+        if(ObjectUtils.isEmpty(id)) {
+            getResponseStatusException();
+        }
         produtoRepository
                 .findById(id)
                 .map( produtoAtual -> {
@@ -41,15 +48,17 @@ public class ProdutoService {
     }
 
     public void delete( Integer id) {
-        produtoRepository
-                .findById(id)
-                .map( produto -> {
-                    produtoRepository.delete(produto);
-                    return produto;
-                }).orElseThrow( () -> getResponseStatusException());
+        if(produtoRepository.existsById(id)) {
+            delete(id);
+        }
+        getResponseStatusException();
     }
 
     public List<Produto> findProduto( Produto filtro ) {
+        if(ObjectUtils.isEmpty(filtro)) {
+            getResponseStatusException();
+        }
+
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
                 .withIgnoreCase()
