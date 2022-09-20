@@ -5,6 +5,7 @@ import com.brunoonofre64.domain.Produto;
 import com.brunoonofre64.service.ProdutoService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
@@ -26,14 +27,14 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Produto save( @RequestBody Produto produto ) {
+    public Produto save( @RequestBody @Valid Produto produto ) {
         return produtoService.save(produto);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     public void update( @PathVariable("id") Integer id,
-                        @RequestBody Produto produto ) {
+                        @RequestBody @Valid Produto produto ) {
         produtoService.update(id, produto);
     }
 

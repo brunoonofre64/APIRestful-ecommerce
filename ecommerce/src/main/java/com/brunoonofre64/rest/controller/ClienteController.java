@@ -4,6 +4,7 @@ import com.brunoonofre64.domain.Cliente;
 import com.brunoonofre64.service.ClienteService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -27,14 +28,14 @@ public class ClienteController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Cliente save( @RequestBody Cliente cliente ) {
+    public Cliente save( @RequestBody @Valid Cliente cliente ) {
         return clienteService.save(cliente);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     public void update ( @PathVariable("id") Integer id,
-                        @RequestBody Cliente cliente ) {
+                        @RequestBody @Valid Cliente cliente ) {
         clienteService.uptade(id, cliente);
     }
 

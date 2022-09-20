@@ -8,7 +8,6 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -26,7 +25,6 @@ public class ClienteService {
                         getResponseStatusException());
     }
 
-//    @ResponseStatus(HttpStatus.CREATED)
     public Cliente save( Cliente cliente ) {
         return clienteRepository.save(cliente);
     }

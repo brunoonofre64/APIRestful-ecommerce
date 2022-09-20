@@ -10,6 +10,8 @@ import com.brunoonofre64.service.impl.PedidoServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
@@ -22,7 +24,7 @@ public class PedidoController {
     private final PedidoServiceImpl pedidoServiceImpl;
     @PostMapping
     @ResponseStatus(CREATED)
-    public Integer save( @RequestBody  PedidoDTO dto ) {
+    public Integer save( @RequestBody @Valid PedidoDTO dto ) {
         Pedido pedido = pedidoService.salvar(dto);
         return pedido.getId();
     }
@@ -34,7 +36,7 @@ public class PedidoController {
     @PatchMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     public void atualizaStatusPedido( @PathVariable("id") Integer id,
-                                      @RequestBody AtualizacaoStatusPedidoDTO dto ) {
+                                      @RequestBody @Valid AtualizacaoStatusPedidoDTO dto ) {
         String novoStatus = dto.getNovoStatus();
         pedidoService.atualizaStatusPedido(id, StatusPedido.valueOf(novoStatus));
     }
